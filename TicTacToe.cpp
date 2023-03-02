@@ -13,12 +13,10 @@ using namespace std;
 int range = 600;
 Mat img(range, range + 300, CV_8UC3, Scalar(255, 255, 255));
 
-// 井字遊戲
+
 int board[9] = { 0,0,0,0,0,0,0,0,0 };
 int GameRound = 0;
 bool mode = true;
-
-// 電腦
 int posmax, posmin;
 
 void init() 
@@ -49,7 +47,8 @@ int checkGameResult()
 		 board[4] == board[2] && board[4] == board[6] && board[4] != 0)
 		return board[4];
 	// 平手
-	if (GameRound == 9)
+	if ((board[0] != 0) && (board[1] != 0) && (board[2] != 0) && (board[3] != 0) && (board[4] != 0) &&
+		(board[5] != 0) && (board[6] != 0) && (board[7] != 0) && (board[8] != 0))
 		return 3;
 	// 遊戲未結束
 	return 0;
@@ -74,60 +73,60 @@ void paintShape(int player, int board_num)
 	}
 }
 
-int MinMax(int board[], int player, int depth)
+int minimax(int board[], int player, int depth)
 {
 	// X的一方為 Max 、 Max結果越大對 X 越好
 	// O的一方為 Min 、 Min結果越小對 O 越好
-	int result;
-	int max_num = 1;
-	int min_num = -1;
-	// 檢查結果
+	int maxNum = 1;
+	int minNum = -1;
+	// 檢查勝負
 	int MINMAX = checkGameResult();
-	// O贏 局面為 -1 分
+	// 當O贏 局面為 -1 分
 	if (MINMAX == 1)
 		return -1;
-	// X贏 局面為 1 分
+	// 當X贏 局面為 1 分
 	else if (MINMAX == 2)
 		return 1;
 	// 沒有結果、平局 局面為 0 分
-	else if( (board[0] != 0) && (board[1] != 0) && (board[2] != 0) && (board[3] != 0) && (board[4] != 0)
-		 &&  (board[5] != 0) && (board[6] != 0) && (board[7] != 0) && (board[8] != 0))
+	else if(MINMAX == 3)
 		return 0;
-	// 9個格子
+
+	// 開始對空格進行填入
+	int result;
 	for (int i = 0; i < 9; i++)
 	{
-		// 當格子為空時填入
 		if (board[i] == 0)
 		{
-			// 當玩家為 X
+			// 玩家為 X
 			if (player == 2)
 			{
 				// 填入 X
 				board[i] = 2;
-				// Min-Max跑 X , depth會+1往下一層
-				result = MinMax(board, 1, depth + 1);
+				// 輪到玩家 O (depth往下一層)
+				result = minimax(board, 1, depth + 1);
 				// 改回空格
 				board[i] = 0;
-				// 結果大於-1的話存到min_num
-				if (result > min_num)
+				// 結果大於-1的話存到 minNum
+				if (result > minNum)
 				{
-					min_num = result;
+					minNum = result;
+					// 將 X 最後填入的格子存到 posmin
 					if (depth == 0)
 						posmin = i;
 				}
 			}
-			// 當玩家為 O
+			// 玩家為 O
 			else if (player == 1)
 			{
 				// 填入 O
 				board[i] = 1;
-				// Min-Max跑 O , depth會+1往下一層
-				result = MinMax(board, 2, depth + 1);
+				// 輪到玩家 X (depth往下一層)
+				result = minimax(board, 2, depth + 1);
 				// 改回空格
 				board[i] = 0;
-				if (result < max_num)
+				if (result < maxNum)
 				{
-					max_num = result;
+					maxNum = result;
 					if (depth == 0)
 						posmax = i;
 				}
@@ -135,9 +134,9 @@ int MinMax(int board[], int player, int depth)
 		}
 	}
 	if (player == 1)
-		return max_num;
+		return maxNum;
 	else
-		return min_num;
+		return minNum;
 }
 
 void CallBackFunc(int event, int x, int y, int flags, void* userdata)
@@ -176,7 +175,7 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
 		{
 			posmax = -1;
 			posmin = -1;
-			MinMax(board, 2, 0);
+			minimax(board, 2, 0);
 			board[posmin] = (GameRound % 2) + 1;
 			GameRound++;
 		}
