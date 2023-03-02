@@ -1,6 +1,6 @@
 # Tic-Tac-Toe
-程式設計課程實作的井字遊戲。
-
+程式設計課程實作的井字遊戲。  
+[下載連結(Google雲端硬碟)](https://drive.google.com/drive/folders/1xTnBaMFmDqe7BklxcpbSfWgXH1OzJBP_?usp=sharing)
 ## 遊戲說明
 滑鼠左鍵：選擇棋子要放置在哪個格子。  
 滑鼠右鍵：選擇棋子X為玩家或是電腦。  
