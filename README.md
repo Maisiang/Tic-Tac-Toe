@@ -5,8 +5,9 @@
 滑鼠左鍵：選擇棋子要放置在哪個格子。  
 滑鼠右鍵：選擇棋子X為玩家或是電腦。  
 點選RESTART：重新開始。  
-
+### 玩家 vs 電腦
 <img src="https://user-images.githubusercontent.com/86739086/222104352-9e306304-8ca8-4e69-8f77-df30e2d8a37c.gif" width="60%" height="60%">
+### 玩家 vs 玩家
 <img src="https://user-images.githubusercontent.com/86739086/222104331-e1a7ff5d-5237-455a-8145-14f28af81bb2.gif" width="60%" height="60%">
 
 
